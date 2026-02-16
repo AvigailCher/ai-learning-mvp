@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { createPromptHandler } from "../controllers/prompts.controller";
+import { createPromptHandler, getUserPrompts } from "../controllers/prompts.controller";
 
 const router = Router();
 
 router.post("/", createPromptHandler);
+router.get("/:userId", getUserPrompts);
 
 export default router;

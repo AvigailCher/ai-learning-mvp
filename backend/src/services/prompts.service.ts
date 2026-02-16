@@ -53,3 +53,23 @@ export const createPrompt = async (data: {
 
   return created;
 };
+
+export const getUserPrompts = async (userId: number) => {
+  // בדיקת קיום משתמש
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  // קבלת כל הפרומפטים של המשתמש עם פרטי הקטגוריה ותת הקטגוריה
+  return await prisma.prompt.findMany({
+    where: { userId },
+    include: {
+      category: true,
+      subCategory: true,
+    },
+    orderBy: { createdAt: "desc" },
+  });
+};
