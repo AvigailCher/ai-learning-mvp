@@ -33,6 +33,8 @@ model SubCategory {
 
   category   Category @relation(fields: [categoryId], references: [id])
   prompts    Prompt[]
+
+  @@unique([name, categoryId])
 }
 
 model Prompt {

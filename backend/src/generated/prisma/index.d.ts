@@ -5898,6 +5898,7 @@ export namespace Prisma {
 
   export type SubCategoryWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    name_categoryId?: SubCategoryNameCategoryIdCompoundUniqueInput
     AND?: SubCategoryWhereInput | SubCategoryWhereInput[]
     OR?: SubCategoryWhereInput[]
     NOT?: SubCategoryWhereInput | SubCategoryWhereInput[]
@@ -5905,7 +5906,7 @@ export namespace Prisma {
     categoryId?: IntFilter<"SubCategory"> | number
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     prompts?: PromptListRelationFilter
-  }, "id">
+  }, "id" | "name_categoryId">
 
   export type SubCategoryOrderByWithAggregationInput = {
     id?: SortOrder
@@ -6321,6 +6322,11 @@ export namespace Prisma {
   export type CategoryScalarRelationFilter = {
     is?: CategoryWhereInput
     isNot?: CategoryWhereInput
+  }
+
+  export type SubCategoryNameCategoryIdCompoundUniqueInput = {
+    name: string
+    categoryId: number
   }
 
   export type SubCategoryCountOrderByAggregateInput = {
