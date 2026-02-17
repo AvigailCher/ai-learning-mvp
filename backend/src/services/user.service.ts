@@ -16,3 +16,16 @@ export const getAllUsers = async () => {
     },
   });
 };
+
+/**
+ * Get user by phone number
+ * Used for login - checks if user exists
+ */
+export const getUserByPhone = async (phone: string) => {
+  return await prisma.user.findUnique({
+    where: { phone },
+    include: {
+      prompts: true,
+    },
+  });
+};

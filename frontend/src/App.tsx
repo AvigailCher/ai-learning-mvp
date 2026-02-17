@@ -1,0 +1,116 @@
+import { useState } from "react";
+import Register from "./components/Register";
+import Dashboard from "./components/Dashboard";
+import PromptForm from "./components/PromptForm";
+import PromptHistory from "./components/PromptHistory";
+import "./App.css";
+
+/**
+ * Main App Component
+ * Manages the overall application flow and state
+ * Routes between different pages: Register → Dashboard → PromptForm → PromptHistory
+ * 
+ * App State:
+ * - currentPage: which page to display
+ * - user: logged-in user information
+ * - selectedCategory: category and subcategory selected by user
+ */
+function App() {
+  // Current page state: determines which component to show
+  // Values: "register", "dashboard", "prompt-form", "history"
+  const [currentPage, setCurrentPage] = useState("register");
+
+  // User information after registration
+  // Contains: { id, name, phone }
+  const [user, setUser] = useState(null);
+
+  // Selected category information
+  // Contains: { categoryId, categoryName, subCategoryId, subCategoryName }
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  /**
+   * Handle user registration
+   * Saves user data and moves to Dashboard page
+   * @param {object} userData - User object returned from API
+   */
+  const handleUserRegistered = (userData) => {
+    setUser(userData); // Save user ID for API calls
+    setCurrentPage("dashboard"); // Move to next page
+  };
+
+  /**
+   * Handle category selection
+   * Saves selected category and moves to PromptForm page
+   * @param {object} categoryData - Category info selected by user
+   */
+  const handleCategorySelected = (categoryData) => {
+    setSelectedCategory(categoryData); // Save category info
+    setCurrentPage("prompt-form"); // Move to next page
+  };
+
+  /**
+   * Handle prompt submission
+   * Moves to PromptHistory page to show learning history
+   */
+  const handlePromptSubmitted = () => {
+    setCurrentPage("history"); // Move to history page
+  };
+
+  /**
+   * Handle new prompt request
+   * Resets to dashboard to select new category/subcategory
+   */
+  const handleNewPrompt = () => {
+    setCurrentPage("dashboard"); // Go back to category selection
+    setSelectedCategory(null); // Clear previous selection
+  };
+
+  return (
+    <div className="app">
+      {/* Navigation header */}
+      <header className="app-header">
+        <h1>🎓 AI Learning MVP</h1>
+        {/* Show user info if logged in */}
+        {user && <p className="user-info">Welcome, {user.name}!</p>}
+      </header>
+
+      {/* Main content area - displays different components based on currentPage */}
+      <main className="app-main">
+        {/* Page 1: User Registration */}
+        {currentPage === "register" && (
+          <Register onUserRegistered={handleUserRegistered} />
+        )}
+
+        {/* Page 2: Category Selection */}
+        {currentPage === "dashboard" && user && (
+          <Dashboard onCategorySelected={handleCategorySelected} />
+        )}
+
+        {/* Page 3: Prompt Submission */}
+        {currentPage === "prompt-form" && user && selectedCategory && (
+          <PromptForm
+            userId={user.id}
+            categoryId={selectedCategory.categoryId}
+            categoryName={selectedCategory.categoryName}
+            subCategoryId={selectedCategory.subCategoryId}
+            subCategoryName={selectedCategory.subCategoryName}
+            onPromptSubmitted={handlePromptSubmitted}
+          />
+        )}
+
+        {/* Page 4: Learning History */}
+        {currentPage === "history" && user && (
+          <PromptHistory userId={user.id} onNewPrompt={handleNewPrompt} />
+        )}
+      </main>
+
+      {/* Footer */}
+      <footer className="app-footer">
+        <p>© 2026 AI Learning MVP - Learn with AI</p>
+      </footer>
+    </div>
+  );
+}
+
+export default App;
+
