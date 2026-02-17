@@ -1,41 +1,15 @@
 # 🎓 AI Learning MVP
 
-A full-stack web application that enables users to learn topics through interactive AI-powered conversations.
-
-**Live Demo:** Ask AI to explain any topic, and get a detailed, lesson-like response!
-
----
-
-## 📋 Table of Contents
-
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
-- [API Documentation](#-api-documentation)
-- [How It Works](#-how-it-works)
-- [Project Status](#-project-status)
-
----
+A full-stack web application that enables users to learn topics through interactive AI-powered conversations using OpenAI GPT-4o.
 
 ## ✨ Features
 
-### User Features
-- 🔐 **User Management** - Simple phone-based registration/login
-- 📚 **Category Selection** - Browse learning categories
-- 🎓 **Prompt Submission** - Ask AI to explain any topic
-- 💾 **Learning History** - View all previous questions and responses
-- 📱 **Responsive Design** - Works on desktop, tablet, mobile
-- ✨ **Beautiful UI** - Modern purple gradient theme
-
-### Technical Features
-- 🤖 **OpenAI Integration** - GPT-4o for high-quality responses
-- ⚡ **Fast Performance** - Vite bundler, optimized queries
-- 🔒 **Error Handling** - Comprehensive error management
-- 📊 **Database** - PostgreSQL with Prisma ORM
-- 🎯 **Clean Code** - Proper architecture, well-documented
-
----
+- **User Management** - Phone-based registration and login
+- **Category Selection** - Browse and explore different learning categories
+- **AI Lessons** - Get AI-generated explanations for any topic
+- **Learning History** - View all previous questions and responses
+- **Responsive Design** - Works perfectly on desktop, tablet, and mobile devices
+- **Beautiful UI** - Modern purple gradient theme with smooth interactions
 
 ## 🛠️ Tech Stack
 
@@ -45,58 +19,79 @@ A full-stack web application that enables users to learn topics through interact
 - **Language:** TypeScript
 - **Database:** PostgreSQL + Prisma ORM
 - **AI:** OpenAI GPT-4o API
-- **Validation:** Input validation + error handling
+- **API Documentation:** Swagger/OpenAPI 3.0
 
 ### Frontend
 - **Framework:** React 18+
 - **Bundler:** Vite
 - **HTTP Client:** Axios
-- **Styling:** CSS3 (Responsive)
-- **Language:** JavaScript (JSX)
+- **Styling:** Responsive CSS3
 
-### DevOps
-- **Package Manager:** npm
-- **Version Control:** Git/GitHub
-- **Database:** PostgreSQL
-- **Environment:** .env files
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 16+
+- PostgreSQL database
+- OpenAI API key
+
+### Backend Setup
+```bash
+cd backend
+npm install
+# Configure .env file with DATABASE_URL and OPENAI_API_KEY
+npx prisma migrate dev
+npm run dev
+```
+Backend runs on `http://localhost:3000`
+
+**API Documentation:** Available at `http://localhost:3000/api-docs` (Swagger UI)
+
+### Frontend Setup
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Frontend runs on `http://localhost:5173`
+
+## 📚 API Endpoints
+
+### Users
+- `POST /api/users` - Register/login user
+- `GET /api/users` - Get all users
+- `GET /api/users/by-phone` - Get user by phone
+
+### Categories
+- `POST /api/categories` - Create category
+- `GET /api/categories` - Get all categories
+
+### Sub-Categories
+- `POST /api/sub-categories` - Create sub-category
+- `GET /api/sub-categories` - Get by category ID
+
+### Prompts (AI Lessons)
+- `POST /api/prompts` - Create lesson (AI generates response)
+- `GET /api/prompts/:userId` - Get user's learning history
+
+## 📊 Database Schema
+
+- **Users:** id, name, phone (unique), createdAt
+- **Categories:** id, name (unique), createdAt
+- **SubCategories:** id, name, categoryId, createdAt
+- **Prompts:** id, prompt, response, userId, categoryId, subCategoryId, createdAt
+
+## 📝 Development Notes
+
+- TypeScript for type safety
+- Prisma for database abstraction
+- Swagger for interactive API documentation
+- Error handling on all endpoints
+- Input validation for user requests
 
 ---
 
-## 📁 Project Structure
-
-```
-ai-learning-mvp/
-├── backend/
-│   ├── src/
-│   │   ├── controllers/     # Request handlers
-│   │   ├── services/        # Business logic
-│   │   ├── routes/          # API endpoints
-│   │   ├── utils/           # Helpers (error handling)
-│   │   ├── lib/             # Configuration
-│   │   ├── app.ts           # Express app
-│   │   └── server.ts        # Server entry point
-│   ├── prisma/
-│   │   ├── schema.prisma    # Database schema
-│   │   └── migrations/      # Database versions
-│   ├── package.json
-│   ├── tsconfig.json
-│   └── README.md
-│
-├── frontend/
-│   ├── src/
-│   │   ├── components/      # React components (Register, Dashboard, etc)
-│   │   ├── App.jsx          # Main router
-│   │   ├── api.js           # API layer
-│   │   ├── index.css        # Global styles
-│   │   └── main.tsx         # Entry point
-│   ├── public/
-│   ├── package.json
-│   ├── vite.config.ts
-│   └── README.md
-│
-├── README.md                 # This file
-└── PROJECT_REVIEW.md         # Detailed review & checklist
-```
+**Created by:** Avigail Cher  
+**Repository:** https://github.com/AvigailCher/ai-learning-mvp
 
 ---
 

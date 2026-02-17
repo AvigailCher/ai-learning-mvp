@@ -1,10 +1,17 @@
 import prisma from "../lib/prisma";
 
+/**
+ * Create a new subcategory under a specific category
+ * @param name - Subcategory name (must be unique within the category)
+ * @param categoryId - ID of the parent category
+ * @returns Created subcategory object
+ * @throws Error if category not found or subcategory already exists
+ */
 export const createSubCategory = async (
   name: string,
   categoryId: number
 ) => {
-  // 1️⃣ לוודא שהקטגוריה קיימת
+  // Verify that the parent category exists
   const category = await prisma.category.findUnique({
     where: { id: categoryId }
   });
@@ -13,7 +20,7 @@ export const createSubCategory = async (
     throw new Error("Category not found");
   }
 
-  // 2️⃣ למנוע כפילות באותה קטגוריה
+  // Check if subcategory with same name already exists in this category
   const existing = await prisma.subCategory.findFirst({
     where: {
       name,
@@ -25,7 +32,7 @@ export const createSubCategory = async (
     throw new Error("SubCategory already exists for this category");
   }
 
-  // 3️⃣ יצירה
+  // Create the subcategory
   return prisma.subCategory.create({
     data: {
       name,
@@ -34,6 +41,11 @@ export const createSubCategory = async (
   });
 };
 
+/**
+ * Get all subcategories for a specific category
+ * @param categoryId - ID of the parent category
+ * @returns Array of subcategories belonging to the category
+ */
 export const getSubCategoriesByCategory = async (
   categoryId: number
 ) => {

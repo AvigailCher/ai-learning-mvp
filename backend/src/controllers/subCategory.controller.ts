@@ -2,6 +2,13 @@ import { Request, Response } from "express";
 import * as subCategoryService from "../services/subCategory.service";
 import { handleError } from "../utils/errorHandler";
 
+/**
+ * Create a new subcategory under a category
+ * POST /api/sub-categories
+ * @param req - Express request with name and categoryId in body
+ * @param res - Express response
+ * @returns 201 Created or 409 Conflict (duplicate in same category)
+ */
 export const createSubCategory = async (req: Request, res: Response) => {
   try {
     const { name, categoryId } = req.body;
@@ -35,6 +42,13 @@ export const createSubCategory = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Get all subcategories for a specific category
+ * GET /api/sub-categories?categoryId={id}
+ * @param req - Express request with categoryId in query params
+ * @param res - Express response
+ * @returns 200 OK with array of subcategories
+ */
 export const getSubCategoriesByCategory = async (
   req: Request,
   res: Response

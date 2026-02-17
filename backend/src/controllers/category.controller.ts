@@ -2,6 +2,13 @@ import { Request, Response } from "express";
 import * as categoryService from "../services/category.service";
 import { handleError } from "../utils/errorHandler";
 
+/**
+ * Create a new learning category
+ * POST /api/categories
+ * @param req - Express request with name in body
+ * @param res - Express response
+ * @returns 201 Created or 409 Conflict (duplicate name)
+ */
 export const createCategory = async (req: Request, res: Response) => {
   try {
     const { name } = req.body;
@@ -30,6 +37,13 @@ export const createCategory = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Get all learning categories with their subcategories
+ * GET /api/categories
+ * @param req - Express request
+ * @param res - Express response
+ * @returns 200 OK with array of categories
+ */
 export const getAllCategories = async (_req: Request, res: Response) => {
   try {
     const categories = await categoryService.getAllCategories();
