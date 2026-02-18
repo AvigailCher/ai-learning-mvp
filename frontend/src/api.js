@@ -1,5 +1,4 @@
 import axios from "axios";
-
 // Create axios instance with backend URL
 // This centralizes all API calls and makes them easy to manage
 const API_URL = "http://localhost:3000/api";
@@ -105,4 +104,4 @@ export const getUserPrompts = async (userId) => {
   }
 };
 
-export default api;
+export { api };

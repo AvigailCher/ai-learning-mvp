@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { asyncHandler } from "../utils/asyncHandler";
 import userRoutes from "./user.routes";
 import categoryRoutes from "./category.routes"; 
 import subCategoryRoutes from "./subCategory.routes";
@@ -11,9 +12,9 @@ const router = Router();
  * GET /api/health
  * @returns Status indicator
  */
-router.get("/health", (req, res) => {
-  res.json({ status: "ok" });
-});
+router.get("/health", asyncHandler(async (req, res) => {
+  res.json({ status: "ok", timestamp: new Date().toISOString() });
+}));
 
 // User endpoints
 router.use("/users", userRoutes);

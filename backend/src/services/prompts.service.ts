@@ -41,7 +41,12 @@ export const createPrompt = async (data: {
   }
 
   // Generate lesson using OpenAI
-  const lesson = await generateLesson(prompt);
+  const lesson = await generateLesson(
+  category.name,
+  subCategory.name,
+  prompt
+);
+
 
   // Ensure TypeScript type safety
   const safeLesson = lesson ?? "AI returned empty response";

@@ -3,6 +3,7 @@ import {
   createSubCategory,
   getSubCategoriesByCategory
 } from "../controllers/subCategory.controller";
+import { asyncHandler } from "../utils/asyncHandler";
 
 const router = Router();
 
@@ -38,7 +39,7 @@ const router = Router();
  *       400:
  *         description: Invalid category ID or missing fields
  */
-router.post("/", createSubCategory);
+router.post("/", asyncHandler(createSubCategory));
 
 /**
  * @swagger
@@ -65,6 +66,6 @@ router.post("/", createSubCategory);
  *       400:
  *         description: Missing or invalid category ID
  */
-router.get("/", getSubCategoriesByCategory);
+router.get("/", asyncHandler(getSubCategoriesByCategory));
 
 export default router;

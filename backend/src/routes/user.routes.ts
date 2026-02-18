@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { registerUser, listUsers, getUserByPhoneController } from "../controllers/user.controller";
+import { asyncHandler } from "../utils/asyncHandler";
 
 const router = Router();
 
@@ -41,7 +42,7 @@ const router = Router();
  *       400:
  *         description: Missing required fields
  */
-router.post("/", registerUser);
+router.post("/", asyncHandler(registerUser));
 
 /**
  * @swagger
@@ -59,7 +60,7 @@ router.post("/", registerUser);
  *               items:
  *                 $ref: '#/components/schemas/User'
  */
-router.get("/", listUsers);
+router.get("/", asyncHandler(listUsers));
 
 /**
  * @swagger
@@ -88,6 +89,6 @@ router.get("/", listUsers);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get("/by-phone", getUserByPhoneController);
+router.get("/by-phone", asyncHandler(getUserByPhoneController));
 
 export default router;

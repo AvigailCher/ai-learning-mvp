@@ -1,5 +1,6 @@
 import { Router } from "express";
 import * as categoryController from "../controllers/category.controller";
+import { asyncHandler } from "../utils/asyncHandler";
 
 const router = Router();
 
@@ -35,7 +36,7 @@ const router = Router();
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post("/", categoryController.createCategory);
+router.post("/", asyncHandler(categoryController.createCategory));
 
 /**
  * @swagger
@@ -53,7 +54,7 @@ router.post("/", categoryController.createCategory);
  *               items:
  *                 $ref: '#/components/schemas/Category'
  */
-router.get("/", categoryController.getAllCategories);
+router.get("/", asyncHandler(categoryController.getAllCategories));
 
 export default router;
 

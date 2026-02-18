@@ -6,17 +6,36 @@ const openai = new OpenAI({
 
 /**
  * Generate an AI-powered lesson using OpenAI GPT-4o
- * @param prompt - The learning topic or question from the user
- * @returns AI-generated lesson as a string
- * @throws Error if OpenAI API call fails
+ * @param category - Selected category name
+ * @param subCategory - Selected subcategory name
+ * @param prompt - The learning question from the user
+ * @returns AI-generated structured lesson
  */
-export const generateLesson = async (prompt: string) => {
+export const generateLesson = async (
+  category: string,
+  subCategory: string,
+  prompt: string
+) => {
   const response = await openai.chat.completions.create({
     model: "gpt-4o",
     messages: [
       {
         role: "system",
-        content: "You are a professional learning assistant that explains topics clearly and structured like a lesson.",
+        content: `
+You are a professional learning assistant.
+
+The student selected:
+Category: ${category}
+Subcategory: ${subCategory}
+
+Always answer in the context of the selected topic.
+Structure the response clearly as a lesson:
+
+1. Clear explanation
+2. Key concepts
+3. Simple example (if relevant)
+4. Short summary
+        `,
       },
       {
         role: "user",

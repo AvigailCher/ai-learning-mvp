@@ -1,8 +1,10 @@
+
 import { useState } from "react";
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
 import PromptForm from "./components/PromptForm";
 import PromptHistory from "./components/PromptHistory";
+import AdminDashboard from "./components/AdminDashboard";
 import "./App.css";
 
 /**
@@ -17,7 +19,7 @@ import "./App.css";
  */
 function App() {
   // Current page state: determines which component to show
-  // Values: "register", "dashboard", "prompt-form", "history"
+  // Values: "register", "dashboard", "prompt-form", "history", "admin"
   const [currentPage, setCurrentPage] = useState("register");
 
   // User information after registration
@@ -78,6 +80,65 @@ function App() {
         <h1>🎓 AI Learning MVP</h1>
         {/* Show user info if logged in */}
         {user && <p className="user-info">Welcome, {user.name}!</p>}
+        {/* Admin navigation button (for demo, always visible) */}
+  <nav style={{ marginTop: "1rem", display: "flex", gap: "1.5rem", justifyContent: "center", alignItems: "center" }}>
+          <button
+            onClick={() => setCurrentPage("register")}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#222",
+              fontSize: "1.15rem",
+              fontWeight: "bold",
+              padding: 0,
+              cursor: "pointer",
+              letterSpacing: "0.03em"
+            }}
+          >Register</button>
+          <button
+            onClick={() => setCurrentPage("dashboard")}
+            disabled={!user}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#222",
+              fontSize: "1.15rem",
+              fontWeight: "bold",
+              padding: 0,
+              cursor: "pointer",
+              letterSpacing: "0.03em",
+              opacity: user ? 1 : 0.5
+            }}
+          >Dashboard</button>
+          <button
+            onClick={() => setCurrentPage("history")}
+            disabled={!user}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#222",
+              fontSize: "1.15rem",
+              fontWeight: "bold",
+              padding: 0,
+              cursor: "pointer",
+              letterSpacing: "0.03em",
+              opacity: user ? 1 : 0.5
+            }}
+          >History</button>
+          <button
+            onClick={() => setCurrentPage("admin")}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#222",
+              fontSize: "1.15rem",
+              fontWeight: "bold",
+              padding: 0,
+              cursor: "pointer",
+              letterSpacing: "0.03em"
+            }}
+          >Admin Dashboard</button>
+        </nav>
       </header>
 
       {/* Main content area - displays different components based on currentPage */}
@@ -108,6 +169,9 @@ function App() {
         {currentPage === "history" && user && (
           <PromptHistory userId={user.id} onNewPrompt={handleNewPrompt} />
         )}
+
+        {/* Admin Dashboard Page */}
+        {currentPage === "admin" && <AdminDashboard />}
       </main>
 
       {/* Footer */}

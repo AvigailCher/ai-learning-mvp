@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { createPromptHandler, getUserPrompts } from "../controllers/prompts.controller";
+import { asyncHandler } from "../utils/asyncHandler";
 
 const router = Router();
 
@@ -45,7 +46,7 @@ const router = Router();
  *       500:
  *         description: AI generation failed
  */
-router.post("/", createPromptHandler);
+router.post("/", asyncHandler(createPromptHandler));
 
 /**
  * @swagger
@@ -72,6 +73,6 @@ router.post("/", createPromptHandler);
  *       404:
  *         description: User not found
  */
-router.get("/:userId", getUserPrompts);
+router.get("/:userId", asyncHandler(getUserPrompts));
 
 export default router;
