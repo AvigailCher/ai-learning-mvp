@@ -21,9 +21,9 @@ export default function Register({ onUserRegistered }) {
     e.preventDefault();
     setError("");
 
-    // Both name and phone are ALWAYS required
-    if (!name.trim() || !phone.trim()) {
-      setError("Name and phone are required");
+    // Phone is always required. Name is required only for new users.
+    if (!phone.trim()) {
+      setError("Phone is required");
       return;
     }
 
@@ -40,26 +40,38 @@ export default function Register({ onUserRegistered }) {
 
       if (existingUser) {
         // User exists - login them and send them straight to history
-        // Signal parent that this is an EXISTING user (not new)
         onUserRegistered(existingUser, true); // true = isExistingUser
         setLoading(false);
         return;
       }
 
-      // User doesn't exist - create new account
+      // User doesn't exist - require name for registration
+      if (!name.trim()) {
+        setError("Name is required for new users");
+        setLoading(false);
+        return;
+      }
+
       try {
         const newUser = await registerUser(name, phone);
-        // Signal parent that this is a NEW user
         onUserRegistered(newUser, false); // false = isNewUser
       } catch (err) {
-        // If we get here and it says phone already exists,
-        // it means the user was created between our check and now
-        // Just login with that phone
         if (err.message && err.message.includes("already registered")) {
           const user = await getUserByPhone(phone);
           onUserRegistered(user, true); // Treat as existing user
         } else {
-          setError(err.message || "Registration failed");
+          // Try to extract validation errors from all possible locations
+          let details = null;
+          if (err.details && Array.isArray(err.details)) {
+            details = err.details;
+          } else if (err.response && err.response.data && Array.isArray(err.response.data.details)) {
+            details = err.response.data.details;
+          }
+          if (details) {
+            setError(details.map((d) => d.message).join(" | "));
+          } else {
+            setError(err.message || "Registration failed");
+          }
           setLoading(false);
         }
       }

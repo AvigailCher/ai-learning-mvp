@@ -21,7 +21,11 @@ export const registerUser = async (name, phone) => {
     const response = await api.post("/users", { name, phone });
     return response.data;
   } catch (error) {
-    throw error.response?.data?.error || error.message;
+    // If backend returns validation error, throw the full response.data
+    if (error.response && error.response.data) {
+      throw error.response.data;
+    }
+    throw error.message;
   }
 };
 

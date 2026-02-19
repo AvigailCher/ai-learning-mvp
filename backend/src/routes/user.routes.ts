@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { registerUser, listUsers, getUserByPhoneController } from "../controllers/user.controller";
 import { asyncHandler } from "../utils/asyncHandler";
+import { validateBody, registerUserSchema } from "../utils/zodValidation";
 
 const router = Router();
 
@@ -42,7 +43,7 @@ const router = Router();
  *       400:
  *         description: Missing required fields
  */
-router.post("/", asyncHandler(registerUser));
+router.post("/", validateBody(registerUserSchema), asyncHandler(registerUser));
 
 /**
  * @swagger

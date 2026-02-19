@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
 import PromptForm from "./components/PromptForm";
@@ -20,7 +21,7 @@ import "./App.css";
 function App() {
   // Current page state: determines which component to show
   // Values: "register", "dashboard", "prompt-form", "history", "admin"
-  const [currentPage, setCurrentPage] = useState("register");
+  // currentPage no longer needed, routing is handled by react-router
 
   // User information after registration
   // Contains: { id, name, phone }
@@ -37,13 +38,15 @@ function App() {
    * @param {object} userData - User object returned from API
    * @param {boolean} isExistingUser - Whether user already existed
    */
+  const navigate = useNavigate();
   const handleUserRegistered = (userData, isExistingUser = false) => {
-    setUser(userData); // Save user ID for API calls
-    
-    // Existing users go straight to history
-    // New users go to dashboard to select category
-    const nextPage = isExistingUser ? "history" : "dashboard";
-    setCurrentPage(nextPage);
+    setUser(userData);
+    // Navigate to the correct page
+    if (isExistingUser) {
+      navigate("/history");
+    } else {
+      navigate("/dashboard");
+    }
   };
 
   /**
@@ -52,8 +55,8 @@ function App() {
    * @param {object} categoryData - Category info selected by user
    */
   const handleCategorySelected = (categoryData) => {
-    setSelectedCategory(categoryData); // Save category info
-    setCurrentPage("prompt-form"); // Move to next page
+    setSelectedCategory(categoryData);
+    navigate("/prompt-form");
   };
 
   /**
@@ -61,7 +64,7 @@ function App() {
    * Moves to PromptHistory page to show learning history
    */
   const handlePromptSubmitted = () => {
-    setCurrentPage("history"); // Move to history page
+    navigate("/history");
   };
 
   /**
@@ -69,116 +72,48 @@ function App() {
    * Resets to dashboard to select new category/subcategory
    */
   const handleNewPrompt = () => {
-    setCurrentPage("dashboard"); // Go back to category selection
-    setSelectedCategory(null); // Clear previous selection
+    setSelectedCategory(null);
+    navigate("/dashboard");
   };
 
   return (
     <div className="app">
-      {/* Navigation header */}
       <header className="app-header">
-        <h1>🎓 AI Learning MVP</h1>
-        {/* Show user info if logged in */}
-        {user && <p className="user-info">Welcome, {user.name}!</p>}
-        {/* Admin navigation button (for demo, always visible) */}
-  <nav style={{ marginTop: "1rem", display: "flex", gap: "1.5rem", justifyContent: "center", alignItems: "center" }}>
-          <button
-            onClick={() => setCurrentPage("register")}
-            style={{
-              background: "none",
-              border: "none",
-              color: "#222",
-              fontSize: "1.15rem",
-              fontWeight: "bold",
-              padding: 0,
-              cursor: "pointer",
-              letterSpacing: "0.03em"
-            }}
-          >Register</button>
-          <button
-            onClick={() => setCurrentPage("dashboard")}
-            disabled={!user}
-            style={{
-              background: "none",
-              border: "none",
-              color: "#222",
-              fontSize: "1.15rem",
-              fontWeight: "bold",
-              padding: 0,
-              cursor: "pointer",
-              letterSpacing: "0.03em",
-              opacity: user ? 1 : 0.5
-            }}
-          >Dashboard</button>
-          <button
-            onClick={() => setCurrentPage("history")}
-            disabled={!user}
-            style={{
-              background: "none",
-              border: "none",
-              color: "#222",
-              fontSize: "1.15rem",
-              fontWeight: "bold",
-              padding: 0,
-              cursor: "pointer",
-              letterSpacing: "0.03em",
-              opacity: user ? 1 : 0.5
-            }}
-          >History</button>
-          <button
-            onClick={() => setCurrentPage("admin")}
-            style={{
-              background: "none",
-              border: "none",
-              color: "#222",
-              fontSize: "1.15rem",
-              fontWeight: "bold",
-              padding: 0,
-              cursor: "pointer",
-              letterSpacing: "0.03em"
-            }}
-          >Admin Dashboard</button>
-        </nav>
-      </header>
-
-      {/* Main content area - displays different components based on currentPage */}
-      <main className="app-main">
-        {/* Page 1: User Registration */}
-        {currentPage === "register" && (
-          <Register onUserRegistered={handleUserRegistered} />
-        )}
-
-        {/* Page 2: Category Selection */}
-        {currentPage === "dashboard" && user && (
-          <Dashboard onCategorySelected={handleCategorySelected} />
-        )}
-
-        {/* Page 3: Prompt Submission */}
-        {currentPage === "prompt-form" && user && selectedCategory && (
-          <PromptForm
-            userId={user.id}
-            categoryId={selectedCategory.categoryId}
-            categoryName={selectedCategory.categoryName}
-            subCategoryId={selectedCategory.subCategoryId}
-            subCategoryName={selectedCategory.subCategoryName}
-            onPromptSubmitted={handlePromptSubmitted}
-          />
-        )}
-
-        {/* Page 4: Learning History */}
-        {currentPage === "history" && user && (
-          <PromptHistory userId={user.id} onNewPrompt={handleNewPrompt} />
-        )}
-
-        {/* Admin Dashboard Page */}
-        {currentPage === "admin" && <AdminDashboard />}
-      </main>
-
-      {/* Footer */}
-      <footer className="app-footer">
-        <p>© 2026 AI Learning MVP - Learn with AI</p>
-      </footer>
-    </div>
+          <h1>🎓 AI Learning MVP</h1>
+          {user && <p className="user-info">Welcome, {user.name}!</p>}
+          <nav style={{ marginTop: "1rem", display: "flex", gap: "1.5rem", justifyContent: "center", alignItems: "center" }}>
+            <button onClick={() => navigate("/register")}
+              style={{ background: "none", border: "none", color: "#222", fontSize: "1.15rem", fontWeight: "bold", padding: 0, cursor: "pointer", letterSpacing: "0.03em" }}>
+              Register
+            </button>
+            <button onClick={() => navigate("/dashboard")} disabled={!user}
+              style={{ background: "none", border: "none", color: "#222", fontSize: "1.15rem", fontWeight: "bold", padding: 0, cursor: "pointer", letterSpacing: "0.03em", opacity: user ? 1 : 0.5 }}>
+              Dashboard
+            </button>
+            <button onClick={() => navigate("/history")} disabled={!user}
+              style={{ background: "none", border: "none", color: "#222", fontSize: "1.15rem", fontWeight: "bold", padding: 0, cursor: "pointer", letterSpacing: "0.03em", opacity: user ? 1 : 0.5 }}>
+              History
+            </button>
+            <button onClick={() => navigate("/admin")} disabled={!user}
+              style={{ background: "none", border: "none", color: "#222", fontSize: "1.15rem", fontWeight: "bold", padding: 0, cursor: "pointer", letterSpacing: "0.03em", opacity: user ? 1 : 0.5 }}>
+              Admin Dashboard
+            </button>
+          </nav>
+        </header>
+        <main className="app-main">
+          <Routes>
+            <Route path="/register" element={<Register onUserRegistered={handleUserRegistered} />} />
+            <Route path="/dashboard" element={user ? <Dashboard onCategorySelected={handleCategorySelected} /> : <Navigate to="/register" />} />
+            <Route path="/prompt-form" element={user && selectedCategory ? <PromptForm userId={user.id} categoryId={selectedCategory.categoryId} categoryName={selectedCategory.categoryName} subCategoryId={selectedCategory.subCategoryId} subCategoryName={selectedCategory.subCategoryName} onPromptSubmitted={handlePromptSubmitted} /> : <Navigate to="/dashboard" />} />
+            <Route path="/history" element={user ? <PromptHistory userId={user.id} onNewPrompt={handleNewPrompt} /> : <Navigate to="/register" />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="*" element={<Navigate to="/register" />} />
+          </Routes>
+        </main>
+        <footer className="app-footer">
+          <p>© 2026 AI Learning MVP - Learn with AI</p>
+        </footer>
+      </div>
   );
 }
 

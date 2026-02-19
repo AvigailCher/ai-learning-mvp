@@ -177,6 +177,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -185,8 +186,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id    Int    @id @default(autoincrement())\n  name  String\n  phone String @unique\n\n  prompts Prompt[]\n}\n\nmodel Category {\n  id   Int    @id @default(autoincrement())\n  name String @unique\n\n  subCategories SubCategory[]\n  prompts       Prompt[]\n}\n\nmodel SubCategory {\n  id         Int    @id @default(autoincrement())\n  name       String\n  categoryId Int\n\n  category Category @relation(fields: [categoryId], references: [id])\n  prompts  Prompt[]\n\n  @@unique([name, categoryId]) // ← Add this line\n}\n\nmodel Prompt {\n  id            Int      @id @default(autoincrement())\n  userId        Int\n  categoryId    Int\n  subCategoryId Int\n  prompt        String\n  response      String\n  createdAt     DateTime @default(now())\n\n  user        User        @relation(fields: [userId], references: [id])\n  category    Category    @relation(fields: [categoryId], references: [id])\n  subCategory SubCategory @relation(fields: [subCategoryId], references: [id])\n}\n",
-  "inlineSchemaHash": "cdc0dd4300fa2aa6149d1d4b7820f159f7e69dc455f9f76090e864dc8810258e",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id    Int    @id @default(autoincrement())\n  name  String\n  phone String @unique\n\n  prompts Prompt[]\n}\n\nmodel Category {\n  id   Int    @id @default(autoincrement())\n  name String @unique\n\n  subCategories SubCategory[]\n  prompts       Prompt[]\n}\n\nmodel SubCategory {\n  id         Int    @id @default(autoincrement())\n  name       String\n  categoryId Int\n\n  category Category @relation(fields: [categoryId], references: [id])\n  prompts  Prompt[]\n\n  @@unique([name, categoryId])\n}\n\nmodel Prompt {\n  id            Int      @id @default(autoincrement())\n  userId        Int\n  categoryId    Int\n  subCategoryId Int\n  prompt        String\n  response      String\n  createdAt     DateTime @default(now())\n\n  user        User        @relation(fields: [userId], references: [id])\n  category    Category    @relation(fields: [categoryId], references: [id])\n  subCategory SubCategory @relation(fields: [subCategoryId], references: [id])\n}\n",
+  "inlineSchemaHash": "844032f08cc8b8494d9212258dada427f85c09e7c06a1a658f3669230ffc2c68",
   "copyEngine": true
 }
 
