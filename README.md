@@ -1,407 +1,221 @@
-# 🎓 AI Learning MVP
+# 🎓 AI-Driven Learning Platform (Mini MVP)
 
-A full-stack web application that enables users to learn topics through interactive AI-powered conversations using OpenAI GPT-4o.
+A full-stack web application that enables users to learn topics through structured AI-generated lessons.
 
-## ✨ Features
+Users can select a category and sub-category, submit a prompt, receive a lesson-like response from OpenAI, and review their learning history. The system also includes an admin dashboard to view all users and their prompt activity.
 
-- **User Management** - Phone-based registration and login
-- **Category Selection** - Browse and explore different learning categories
-- **AI Lessons** - Get AI-generated explanations for any topic
-- **Learning History** - View all previous questions and responses
-- **Responsive Design** - Works perfectly on desktop, tablet, and mobile devices
-- **Beautiful UI** - Modern purple gradient theme with smooth interactions
+---
 
-## 🛠️ Tech Stack
+## 🏗 Architecture Overview
 
 ### Backend
-- **Runtime:** Node.js
-- **Framework:** Express.js
-- **Language:** TypeScript
-- **Database:** PostgreSQL + Prisma ORM
-- **AI:** OpenAI GPT-4o API
-- **API Documentation:** Swagger/OpenAPI 3.0
+- Node.js  
+- Express.js  
+- TypeScript  
+- PostgreSQL  
+- Prisma ORM  
+- OpenAI GPT-4o API  
+
+Structured using layered architecture:
+
+Routes → Controllers → Services → Database
 
 ### Frontend
-- **Framework:** React 18+
-- **Bundler:** Vite
-- **HTTP Client:** Axios
-- **Styling:** Responsive CSS3
+- React  
+- Vite  
+- Axios  
+- Responsive CSS  
 
-## 🚀 Getting Started
+---
 
-### Prerequisites
-- Node.js 16+
-- PostgreSQL database
-- OpenAI API key
+## 🚀 Features
 
-### Backend Setup
-```bash
-cd backend
-npm install
-# Configure .env file with DATABASE_URL and OPENAI_API_KEY
-npx prisma migrate dev
-npm run dev
-```
-Backend runs on `http://localhost:3000`
+### User Flow
+- Register / Login (phone-based)
+- Select Category
+- Select Sub-Category
+- Submit Prompt
+- Receive AI-generated lesson
+- View learning history
 
-**API Documentation:** Available at `http://localhost:3000/api-docs` (Swagger UI)
+### Admin Dashboard
+- View all users
+- View all prompts per user
 
-### Frontend Setup
-```bash
-cd frontend
-npm install
-npm run dev
-```
-Frontend runs on `http://localhost:5173`
-
-## 📚 API Endpoints
-
-### Users
-- `POST /api/users` - Register/login user
-- `GET /api/users` - Get all users
-- `GET /api/users/by-phone` - Get user by phone
-
-### Categories
-- `POST /api/categories` - Create category
-- `GET /api/categories` - Get all categories
-
-### Sub-Categories
-- `POST /api/sub-categories` - Create sub-category
-- `GET /api/sub-categories` - Get by category ID
-
-### Prompts (AI Lessons)
-- `POST /api/prompts` - Create lesson (AI generates response)
-- `GET /api/prompts/:userId` - Get user's learning history
+---
 
 ## 📊 Database Schema
 
-- **Users:** id, name, phone (unique), createdAt
-- **Categories:** id, name (unique), createdAt
-- **SubCategories:** id, name, categoryId, createdAt
-- **Prompts:** id, prompt, response, userId, categoryId, subCategoryId, createdAt
+### Users
+- id
+- name
+- phone (unique)
 
-## 📝 Development Notes
+### Categories
+- id
+- name (unique)
 
-- TypeScript for type safety
-- Prisma for database abstraction
-- Swagger for interactive API documentation
-- Error handling on all endpoints
-- Input validation for user requests
+### SubCategories
+- id
+- name
+- categoryId  
+- Unique constraint: (name, categoryId)
+
+### Prompts
+- id
+- userId
+- categoryId
+- subCategoryId
+- prompt
+- response
+- createdAt
+
+Relationships:
+- One User → Many Prompts  
+- One Category → Many SubCategories  
+- One Category → Many Prompts  
+- One SubCategory → Many Prompts  
 
 ---
 
-**Created by:** Avigail Cher  
-**Repository:** https://github.com/AvigailCher/ai-learning-mvp
+## 📌 Example Use Case
+
+Example scenario:
+
+1. A user registers with a name and phone number.
+2. The user selects the category "Science".
+3. The user selects the sub-category "Space".
+4. The user submits the prompt: "Explain black holes".
+5. The system sends the request to OpenAI.
+6. The AI returns a structured lesson.
+7. The lesson is stored in the database.
+8. The user can revisit their learning history.
+9. The admin dashboard can display the user and their prompt history.
 
 ---
 
-## 🚀 Getting Started
+## ⚙️ Setup Instructions
 
 ### Prerequisites
+- Node.js (v16+)
+- PostgreSQL
+- OpenAI API key
 
-- **Node.js** (v14+)
-- **npm** or **yarn**
-- **PostgreSQL** (running locally or remote connection)
-- **OpenAI API Key** (from openai.com)
+---
 
-### Installation
+### 1️⃣ Clone Repository
 
-#### 1. Clone Repository
 ```bash
 git clone https://github.com/AvigailCher/ai-learning-mvp.git
 cd ai-learning-mvp
 ```
 
-#### 2. Setup Backend
+---
+
+### 2️⃣ Backend Setup
 
 ```bash
 cd backend
-
-# Install dependencies
 npm install
-
-# Create .env file
-cp .env.example .env
-
-# Edit .env with your credentials
-# DATABASE_URL="postgresql://user:password@localhost:5432/ai_learning_mvp"
-# OPENAI_API_KEY="sk-..."
-
-# Run database migrations
-npx prisma migrate dev
-
-# Start backend server
-npm run dev
-# Server runs on http://localhost:3000
 ```
 
-#### 3. Setup Frontend
+Create a `.env` file:
 
-```bash
-cd frontend
-
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-# App runs on http://localhost:5173
-```
-
----
-
-## 🔗 API Documentation
-
-### User Endpoints
-
-```
-POST /api/users
-Register new user or check existing user
-Body: { name: string, phone: string }
-Response: { id, name, phone }
-
-GET /api/users
-List all users
-Response: Array of users with prompts
-
-GET /api/users/by-phone?phone=123456
-Get user by phone (for login)
-Response: { id, name, phone, prompts: [] }
-```
-
-### Category Endpoints
-
-```
-POST /api/categories
-Create category
-Body: { name: string }
-Response: { id, name }
-
-GET /api/categories
-Get all categories with subcategories
-Response: Array of categories
-```
-
-### SubCategory Endpoints
-
-```
-POST /api/sub-categories
-Create subcategory
-Body: { name: string, categoryId: number }
-Response: { id, name, categoryId }
-
-GET /api/sub-categories?categoryId=1
-Get subcategories for a category
-Response: Array of subcategories
-```
-
-### Prompt Endpoints
-
-```
-POST /api/prompts
-Submit prompt and get AI response
-Body: {
-  userId: number,
-  categoryId: number,
-  subCategoryId: number,
-  prompt: string
-}
-Response: {
-  id, userId, categoryId, subCategoryId,
-  prompt: string,
-  response: string (AI-generated),
-  createdAt: timestamp
-}
-
-GET /api/prompts/:userId
-Get user's prompt history
-Response: Array of prompts with responses
-```
-
----
-
-## 🎯 How It Works
-
-### User Journey
-
-```
-1. User Registration/Login
-   ↓
-2. Select Learning Category
-   ↓
-3. Select Subcategory
-   ↓
-4. Ask AI a Question
-   ↓
-5. Receive Lesson (AI Response)
-   ↓
-6. View Learning History
-```
-
-### Technical Flow
-
-```
-Frontend (React)
-    ↓
-  API Call (Axios)
-    ↓
-Backend (Express)
-    ↓
-  Controller (validation)
-    ↓
-  Service (business logic)
-    ↓
-  Database (Prisma)
-    ↓
-AI Service (OpenAI)
-    ↓
-Response (formatted lesson)
-    ↓
-Frontend (display)
-```
-
----
-
-## 📊 Project Status
-
-### Completed ✅
-- [x] Backend API (all endpoints)
-- [x] Frontend UI (all pages)
-- [x] Database schema & migrations
-- [x] OpenAI integration
-- [x] Error handling
-- [x] Input validation
-- [x] Responsive design
-- [x] User login/registration
-- [x] Learning history
-- [x] Code documentation
-
-### Ready for Submission
-- [x] All requirements met
-- [x] Code quality: A-
-- [x] Architecture: Professional
-- [x] Documentation: Complete
-- [x] Testing: Functional
-
----
-
-## 📝 Environment Setup
-
-### Backend (.env)
 ```
 DATABASE_URL="postgresql://user:password@localhost:5432/ai_learning_mvp"
-OPENAI_API_KEY="sk-your-key-here"
-NODE_ENV="development"
+OPENAI_API_KEY="sk-..."
 PORT=3000
 ```
 
-### Frontend (.env)
+Run migrations:
+
+```bash
+npx prisma migrate dev
+```
+
+Start server:
+
+```bash
+npm run dev
+```
+
+Backend runs on:
+
+```
+http://localhost:3000
+```
+
+---
+
+### 3️⃣ Frontend Setup
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Frontend runs on:
+
+```
+http://localhost:5173
+```
+
+---
+
+## 🔐 Environment Variables
+
+### Backend (.env.example)
+
+```
+DATABASE_URL=""
+OPENAI_API_KEY=""
+PORT=3000
+```
+
+### Frontend (.env.example)
+
 ```
 VITE_API_URL="http://localhost:3000/api"
 ```
 
 ---
 
-## 🧪 Testing the App
+## 📡 API Endpoints
 
-1. **Start both servers:**
-   ```bash
-   # Terminal 1 - Backend
-   cd backend
-   npm run dev
+### Users
+- POST /api/users
+- GET /api/users
+- GET /api/users/by-phone
 
-   # Terminal 2 - Frontend
-   cd frontend
-   npm run dev
-   ```
+### Categories
+- POST /api/categories
+- GET /api/categories
 
-2. **Open browser:** http://localhost:5173
+### SubCategories
+- POST /api/sub-categories
+- GET /api/sub-categories?categoryId=
 
-3. **Test flow:**
-   - Register: Name "test" + Phone "1234567890"
-   - Select "Science" → "Space"
-   - Ask: "Explain black holes"
-   - See AI response
-   - View history
+### Prompts
+- POST /api/prompts
+- GET /api/prompts/:userId
 
 ---
 
-## 📚 Documentation
+## 🎯 Project Scope
 
-- **Backend Details:** See `/backend/README.md`
-- **Frontend Details:** See `/frontend/README.md`
-- **Full Review:** See `/PROJECT_REVIEW.md`
+This project focuses on:
+- Clean architecture
+- REST API design
+- Database relationships and constraints
+- AI integration
+- Modular and maintainable code structure
 
----
-
-## 🐛 Troubleshooting
-
-### Backend Issues
-- **"Cannot connect to database"**
-  - Check DATABASE_URL in .env
-  - Ensure PostgreSQL is running
-  - Run `npx prisma migrate dev`
-
-- **"OPENAI_API_KEY not found"**
-  - Add your key to .env
-  - Check format: `sk-...`
-
-### Frontend Issues
-- **"Cannot reach backend"**
-  - Ensure backend is running on :3000
-  - Check VITE_API_URL
-  - Check browser console for errors
-
-- **"Axios not installed"**
-  - Run `npm install axios` in frontend folder
+Advanced features such as authentication roles, Docker, and deployment are outside the MVP scope.
 
 ---
 
-## 🎓 Learning Outcomes
+## 👩‍💻 Author
 
-This project demonstrates:
-- ✅ Full-stack development (backend + frontend)
-- ✅ Modern architecture (MVC pattern)
-- ✅ API design (RESTful principles)
-- ✅ Database design (relational, normalized)
-- ✅ React best practices (hooks, components)
-- ✅ TypeScript (type safety)
-- ✅ Error handling (production-ready)
-- ✅ UI/UX (responsive, accessible)
-
----
-
-## 📄 License
-
-This project is for educational purposes as part of the AI Learning MVP assignment.
-
----
-
-## 👤 Author
-
-**Avigail Cher**  
-GitHub: [@AvigailCher](https://github.com/AvigailCher)
-
----
-
-## 🙏 Acknowledgments
-
-- OpenAI for GPT-4o API
-- Express.js for backend framework
-- React for frontend framework
-- Prisma for ORM
-
----
-
-## 📞 Support
-
-For issues or questions:
-1. Check `/PROJECT_REVIEW.md` for detailed information
-2. Review component READMEs in `/backend/README.md` and `/frontend/README.md`
-3. Check browser console for error messages
-
----
-
-**Built with ❤️ for AI-powered learning**
-
-**Status:** ✅ Ready for Submission (85% complete, fully functional)
+Avigail Cher  
+GitHub: https://github.com/AvigailCher/ai-learning-mvp
